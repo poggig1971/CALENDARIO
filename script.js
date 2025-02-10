@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userRoleDisplay = document.getElementById('user-role-display');
     const eventForm = document.getElementById('event-form');
     const eventItems = document.getElementById('event-items');
+    const exportIcsBtn = document.getElementById('export-ics-btn');
 
     let currentRole = null;
 
@@ -120,60 +121,59 @@ document.addEventListener('DOMContentLoaded', function() {
         renderEvents();
     });
 
+    // --- Funzionalità per esportare in ICS ---
+
+    // Funzione per formattare la data in formato ICS (YYYYMMDDTHHMMSSZ)
+    function formatDateICS(date) {
+        const pad = num => String(num).padStart(2, '0');
+        return date.getUTCFullYear() +
+            pad(date.getUTCMonth() + 1) +
+            pad(date.getUTCDate()) + 'T' +
+            pad(date.getUTCHours()) +
+            pad(date.getUTCMinutes()) +
+            pad(date.getUTCSeconds()) + 'Z';
+    }
+
+    // Funzione per generare il contenuto ICS per gli eventi
+    function generateICS(events) {
+        let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//CalendarioANCE//EN\n";
+        events.forEach(event => {
+            const startDate = new Date(event.date + 'T' + event.time);
+            const endDate = new Date(startDate);
+            endDate.setHours(endDate.getHours() + 1); // durata 1 ora
+            icsContent += "BEGIN:VEVENT\n";
+            icsContent += "UID:" + event.id + "\n";
+            icsContent += "DTSTAMP:" + formatDateICS(new Date()) + "\n";
+            icsContent += "DTSTART:" + formatDateICS(startDate) + "\n";
+            icsContent += "DTEND:" + formatDateICS(endDate) + "\n";
+            icsContent += "SUMMARY:" + event.title + "\n";
+            if (event.location) {
+                icsContent += "LOCATION:" + event.location + "\n";
+            }
+            icsContent += "END:VEVENT\n";
+        });
+        icsContent += "END:VCALENDAR";
+        return icsContent;
+    }
+
+    // Funzione per scaricare il file ICS
+    function downloadICS() {
+        const events = loadEvents(currentRole);
+        const icsData = generateICS(events);
+        const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'calendario_' + currentRole + '.ics';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Aggiunge un event listener per il pulsante "Esporta in ICS"
+    exportIcsBtn.addEventListener('click', downloadICS);
+
     // Mostra inizialmente la vista login
     showLogin();
 });
-// Funzione per formattare la data in formato ICS (YYYYMMDDTHHMMSSZ)
-function formatDateICS(date) {
-  const pad = num => String(num).padStart(2, '0');
-  return date.getUTCFullYear() +
-    pad(date.getUTCMonth() + 1) +
-    pad(date.getUTCDate()) + 'T' +
-    pad(date.getUTCHours()) +
-    pad(date.getUTCMinutes()) +
-    pad(date.getUTCSeconds()) + 'Z';
-}
-
-function generateICS(events) {
-  let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//TuoProgetto//Calendario//IT\n";
-
-  events.forEach(event => {
-    // Creiamo una data per l'inizio
-    const startDate = new Date(event.date + 'T' + event.time);
-    // Impostiamo una durata predefinita, ad esempio 1 ora
-    const endDate = new Date(startDate);
-    endDate.setHours(endDate.getHours() + 1);
-
-    icsContent += "BEGIN:VEVENT\n";
-    icsContent += "UID:" + event.id + "\n";
-    icsContent += "DTSTAMP:" + formatDateICS(new Date()) + "\n";
-    icsContent += "DTSTART:" + formatDateICS(startDate) + "\n";
-    icsContent += "DTEND:" + formatDateICS(endDate) + "\n";
-    icsContent += "SUMMARY:" + event.title + "\n";
-    if (event.location) {
-      icsContent += "LOCATION:" + event.location + "\n";
-    }
-    icsContent += "END:VEVENT\n";
-  });
-
-  icsContent += "END:VCALENDAR";
-  return icsContent;
-}
-
-// Funzione per scaricare il file ICS
-function downloadICS() {
-  // Carica gli eventi per il ruolo corrente (la funzione loadEvents è quella già presente)
-  const events = loadEvents(currentRole);
-  const icsData = generateICS(events);
-  const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  
-  // Crea un link per il download
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = 'calendario_' + currentRole + '.ics';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
 
