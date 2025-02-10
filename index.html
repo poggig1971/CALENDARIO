@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Calendario ANCE Piemonte</title>
-  <link rel="stylesheet" href="STYLES.css">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <!-- Vista Login -->
   <div id="login-view">
+    <!-- Logo -->
+    <img src="logo.png" alt="Logo" id="logo">
     <h2>Login</h2>
-    <label for="role-select">Seleziona il tuo ruolo:</label>
+    <label for="role-select">Seleziona il tuo organo:</label>
     <select id="role-select">
       <option value="">-- Seleziona --</option>
       <option value="consiglio-generale">Consiglio Generale</option>
@@ -22,6 +24,13 @@
       <option value="commissione-tec">Commissione TEC</option>
       <option value="commissione-prz">Commissione PRZ</option>
     </select>
+    <br>
+    <label for="username">Nome:</label>
+    <input type="text" id="username" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    <br>
     <button id="login-btn">Entra</button>
   </div>
 
@@ -29,7 +38,6 @@
   <div id="app-view" style="display: none;">
     <h2>Calendario - <span id="user-role-display"></span></h2>
     <button id="logout-btn">Logout</button>
-    <!-- Pulsante per esportare in ICS -->
     <button id="export-ics-btn">Esporta in ICS</button>
 
     <div id="add-event">
@@ -61,6 +69,15 @@
     <div id="events-list">
       <h3>Appuntamenti</h3>
       <ul id="event-items">
+        <!-- Gli appuntamenti verranno inseriti qui -->
+      </ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
         <!-- Gli appuntamenti verranno inseriti qui -->
       </ul>
     </div>
