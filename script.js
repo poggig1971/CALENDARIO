@@ -5,12 +5,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
     const roleSelect = document.getElementById('role-select');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
     const userRoleDisplay = document.getElementById('user-role-display');
     const eventForm = document.getElementById('event-form');
     const eventItems = document.getElementById('event-items');
     const exportIcsBtn = document.getElementById('export-ics-btn');
 
     let currentRole = null;
+    let currentUser = null; // per memorizzare il nome dell'utente loggato
+
+    // Credenziali di esempio per ogni ruolo
+    const credentials = {
+        "consiglio-generale": { username: "cg", password: "cg123" },
+        "consiglio-presidenza": { username: "cp", password: "cp123" },
+        "assemblea-soci": { username: "as", password: "as123" },
+        "commissione-rop": { username: "rop", password: "rop123" },
+        "commissione-ret": { username: "ret", password: "ret123" },
+        "commissione-rias": { username: "rias", password: "rias123" },
+        "commissione-ri": { username: "ri", password: "ri123" },
+        "commissione-tec": { username: "tec", password: "tec123" },
+        "commissione-prz": { username: "prz", password: "prz123" }
+    };
 
     // Funzioni per gestire la visualizzazione
     function showLogin() {
@@ -73,13 +89,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Gestione del login
     loginBtn.addEventListener('click', function() {
         const selectedRole = roleSelect.value;
-        if (!selectedRole) {
-            alert('Seleziona un ruolo!');
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        
+        if (!selectedRole || !username || !password) {
+            alert('Per favore, compila tutti i campi.');
             return;
         }
+
+        // Verifica delle credenziali per il ruolo selezionato
+        const expected = credentials[selectedRole];
+        if (!expected || username !== expected.username || password !== expected.password) {
+            alert('Nome o password errati per il ruolo selezionato.');
+            return;
+        }
+
         currentRole = selectedRole;
-        // Mostra il nome del ruolo selezionato
-        userRoleDisplay.textContent = roleSelect.options[roleSelect.selectedIndex].text;
+        currentUser = username;
+        // Visualizza il ruolo e il nome utente nella header dell'app
+        userRoleDisplay.textContent = `${roleSelect.options[roleSelect.selectedIndex].text} - ${currentUser}`;
         showApp();
         renderEvents();
     });
@@ -87,7 +115,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Gestione del logout
     logoutBtn.addEventListener('click', function() {
         currentRole = null;
+        currentUser = null;
         roleSelect.value = '';
+        usernameInput.value = '';
+        passwordInput.value = '';
         showLogin();
     });
 
@@ -170,8 +201,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.removeChild(link);
     }
 
-    // Aggiunge un event listener per il pulsante "Esporta in ICS"
+    // Event listener per il pulsante "Esporta in ICS"
     exportIcsBtn.addEventListener('click', downloadICS);
+
+    // Mostra inizialmente la vista login
+    showLogin();
+});
+
 
     // Mostra inizialmente la vista login
     showLogin();
