@@ -92,6 +92,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const username = usernameInput.value.trim();
         const password = passwordInput.value;
         
+        console.log('Ruolo:', selectedRole, 'Nome:', username, 'Password:', password);
+        
         if (!selectedRole || !username || !password) {
             alert('Per favore, compila tutti i campi.');
             return;
@@ -207,9 +209,3 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mostra inizialmente la vista login
     showLogin();
 });
-
-
-    // Mostra inizialmente la vista login
-    showLogin();
-});
-
