@@ -1,0 +1,26 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+
+#login-view, #app-view {
+  max-width: 600px;
+  margin: auto;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+label {
+  display: inline-block;
+  width: 150px;
+  margin-top: 10px;
+}
+
+input, select {
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 10px;
+}

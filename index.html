@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario ANCE Piemonte</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Vista Login -->
+  <div id="login-view">
+    <h2>Login</h2>
+    <label for="role-select">Seleziona il tuo ruolo:</label>
+    <select id="role-select">
+      <option value="">-- Seleziona --</option>
+      <option value="consiglio-generale">Consiglio Generale</option>
+      <option value="consiglio-presidenza">Consiglio di Presidenza</option>
+      <option value="assemblea-soci">Assemblea dei Soci</option>
+      <option value="commissione-rop">Commissione ROP</option>
+      <option value="commissione-ret">Commissione RET</option>
+      <option value="commissione-rias">Commissione RIAS</option>
+      <option value="commissione-ri">Commissione RI</option>
+      <option value="commissione-tec">Commissione TEC</option>
+      <option value="commissione-prz">Commissione PRZ</option>
+    </select>
+    <button id="login-btn">Entra</button>
+  </div>
+
+  <!-- Vista App (gestione appuntamenti) -->
+  <div id="app-view" style="display: none;">
+    <h2>Calendario - <span id="user-role-display"></span></h2>
+    <button id="logout-btn">Logout</button>
+
+    <div id="add-event">
+      <h3>Aggiungi Appuntamento</h3>
+      <form id="event-form">
+        <label for="event-date">Data:</label>
+        <input type="date" id="event-date" required>
+        <br>
+        <label for="event-time">Ora:</label>
+        <input type="time" id="event-time" required>
+        <br>
+        <label for="event-title">Titolo:</label>
+        <input type="text" id="event-title" required>
+        <br>
+        <label for="event-location">Luogo (opzionale):</label>
+        <input type="text" id="event-location">
+        <br>
+        <label for="event-participation">Partecipazione:</label>
+        <select id="event-participation">
+          <option value="non partecipo">Non partecipo</option>
+          <option value="in presenza">In presenza</option>
+          <option value="remoto">Remoto</option>
+        </select>
+        <br>
+        <button type="submit">Aggiungi Appuntamento</button>
+      </form>
+    </div>
+
+    <div id="events-list">
+      <h3>Appuntamenti</h3>
+      <ul id="event-items">
+        <!-- Gli appuntamenti verranno inseriti qui -->
+      </ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+<!-- Pulsante per esportare il calendario -->
+<button id="export-ics-btn">Esporta in ICS</button>
